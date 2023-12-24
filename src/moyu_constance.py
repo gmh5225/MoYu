@@ -17,7 +17,7 @@ detect_zidongxunlun_left = 10, 339, 446, 640
 # 防外挂检测
 detect_fang_waiguai = 25, 22, 303, 125
 # 检测宝宝是什么
-detect_bb_shishenm = 1100, 596, 1261, 768
+detect_bb_shishenm = 1100, 596, 1261, 631
 # 检测死亡点
 detect_siwang_point = 1329, 999
 # 宝宝1出征
