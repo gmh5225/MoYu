@@ -6,12 +6,12 @@ from moyu_constance import detect_lingqu_renwu, detect_huoxianzhuijiao, detect_z
     detect_zidongxunlun_left, detect_my_location_x, detect_my_location_y, detect_fang_waiguai, \
     click_cancel_leftzidongxunlu, click_cancel_centerzidongxunlu, detect_bb_shishenm, \
     detect_siwang_point, click_huanshou_gezi1
-from moyu_util import checkImage, letterbox_image
+from moyu_util import checkImage, letterbox_image, realDetectSize, realPoint
 
 
 # 检测右边的任务版是否打开
 def checkRightRenwuBan(ocr):
-    result = checkImage(ocr, detect_lingqu_renwu)
+    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -26,7 +26,7 @@ def checkRightRenwuBan(ocr):
 
 # 检测是否领取了任务
 def checkLingQuRenWu(ocr):
-    result = checkImage(ocr, detect_lingqu_renwu)
+    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -49,7 +49,7 @@ def checkLingQuRenWu(ocr):
 # 查看火线追缴
 # [[[75.0, 379.0], [178.0, 379.0], [178.0, 404.0], [75.0, 404.0]], ('魔怪追剿令', 0.919135570526123)]
 def checkHuoXianZhuiJiao(ocr):
-    result = checkImage(ocr, detect_huoxianzhuijiao)
+    result = checkImage(ocr, realDetectSize(detect_huoxianzhuijiao))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -66,7 +66,7 @@ def checkHuoXianZhuiJiao(ocr):
 # 检测是否有自动寻路
 def checkZiDongXunLu(ocr):
     # 检测中间的自动寻路
-    result = checkImage(ocr, detect_zidongxunlun_center)
+    result = checkImage(ocr, realDetectSize(detect_zidongxunlun_center))
     if not any(result):
         return 0, 0
     for idx in range(len(result)):
@@ -75,9 +75,9 @@ def checkZiDongXunLu(ocr):
             if len(line) == 2:
                 c, score = line[1]
                 if '自动寻路' in c:
-                    return click_cancel_centerzidongxunlu
+                    return realPoint(click_cancel_centerzidongxunlu)
     # 检测左边的自动寻路
-    result = checkImage(ocr, detect_zidongxunlun_left)
+    result = checkImage(ocr, realDetectSize(detect_zidongxunlun_left))
     if not any(result):
         return 0, 0
     for idx in range(len(result)):
@@ -86,15 +86,15 @@ def checkZiDongXunLu(ocr):
             if len(line) == 2:
                 c, score = line[1]
                 if '自动寻路' in c:
-                    return click_cancel_leftzidongxunlu
+                    return realPoint(click_cancel_leftzidongxunlu)
     return 0, 0
 
 
 # 检测当前坐标
 def checkMyLocation(ocr):
     list = []
-    list.append(detect_my_location_x)
-    list.append(detect_my_location_y)
+    list.append(realDetectSize(detect_my_location_x))
+    list.append(realDetectSize(detect_my_location_y))
     xy = [0, 0]
     for idx in range(len(list)):
         detect = list[idx]
@@ -122,7 +122,7 @@ def checkMyLocation(ocr):
 
 # 检测防外挂
 def checkFangWaiGuai(ocr):
-    result = checkImage(ocr, detect_fang_waiguai)
+    result = checkImage(ocr, realDetectSize(detect_fang_waiguai))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -137,7 +137,7 @@ def checkFangWaiGuai(ocr):
 
 # 检测是否领取奖励
 def checkLingQuJiangli(ocr):
-    result = checkImage(ocr, detect_lingqu_renwu)
+    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -154,14 +154,14 @@ def checkLingQuJiangli(ocr):
 def checkBB(ocr):
     img_src = Image.open('./screenshot.png')  # (411, 273)
     src_strlist = img_src.load()
-    x, y = click_huanshou_gezi1
+    x, y = realPoint(click_huanshou_gezi1)
     # 100,100 是像素点的坐标
     data = src_strlist[x, y]
     #空的背包
     if data == (20, 22, 23):
         return 0
     else:
-        result = checkImage(ocr, detect_bb_shishenm)
+        result = checkImage(ocr, realDetectSize(detect_bb_shishenm))
         if not any(result):
             return -1
         for idx in range(len(result)):
@@ -180,7 +180,7 @@ def checkBB(ocr):
 def checkIsSiWang():
     img_src = Image.open('./screenshot.png')  # (411, 273)
     src_strlist = img_src.load()
-    x, y = detect_siwang_point
+    x, y = realPoint(detect_siwang_point)
     # 100,100 是像素点的坐标
     data = src_strlist[x, y]
     if data == (232, 183, 241):
