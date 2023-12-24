@@ -192,10 +192,9 @@ def daguai(ocr):
         result = checkFangWaiGuai(ocr)
         # 检测到了防外挂
         if result == 1:
-            while 1:
-                engine.say("外挂检测")
-                engine.runAndWait()
-                time.sleep(1)
+            engine.say("外挂检测")
+            engine.runAndWait()
+            time.sleep(1)
     else:
         logging.info("自己坐标：" + str(x) + "," + str(y))
         global goLeft

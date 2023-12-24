@@ -55,7 +55,7 @@ click_huanshou_fuhua = 1223, 646
 # 点击 取消左边寻路
 click_cancel_leftzidongxunlu = 428, 359
 # 点击 取消中间寻路
-click_cancel_centerzidongxunlu = 817, 644
+click_cancel_centerzidongxunlu = 693, 644
 # 点击 呼出自动寻路
 click_huchu_zidongxunlu = 1000, 820
 
