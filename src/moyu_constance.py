@@ -1,6 +1,6 @@
 
 #截屏大小
-cap_width=1563
+cap_width=1536
 cap_height=1152
 
 

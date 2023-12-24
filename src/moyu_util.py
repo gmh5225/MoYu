@@ -5,8 +5,6 @@ import win32gui
 from PIL import Image
 from PIL import ImageGrab
 
-global scaleScreen
-
 
 def windwow_capture(hwnd):
     # 获取窗口大小和位置
@@ -25,26 +23,30 @@ def checkImage(ocr, rect):
     logging.info(result)
     return result
 
+
 # 鼠标左键点击
 def leftClick(x, y):
     pyautogui.mouseDown(x, y, button='left')
     pyautogui.mouseUp()
+
 
 # 鼠标滚动
 def mouseScroll(x, y, dy):
     pyautogui.moveTo(x, y)
     pyautogui.scroll(dy)
 
+
 # 获取真实大小
-def realDetectSize(size):
+def realDetectSize(size, scaleScreen):
     left, top, right, bootom = size
     return int(left * scaleScreen), int(top * scaleScreen), int(right * scaleScreen), int(bootom * scaleScreen)
 
 
 # 获取真实大小
-def realPoint(point):
+def realPoint(point, scaleScreen):
     x, y = point
     return int(x * scaleScreen), int(y * scaleScreen)
+
 
 # 对图片进行扩大，因为有些图片，较小，识别率低
 def letterbox_image(image, size):

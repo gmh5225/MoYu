@@ -36,11 +36,11 @@ def on_press(key):
 def check(hwnd):
     # 检测是否领取了任务
     logging.info("检测是否领取了任务")
-    result = checkLingQuRenWu(ocr)
+    result = checkLingQuRenWu(ocr,scaleScreen)
     # 需要点击领取奖励
     if result == 2:
         logging.info("点击领取奖励")
-        x, y = realPoint(click_lingqujiangli)
+        x, y = realPoint(click_lingqujiangli,scaleScreen)
         leftClick(left + x, top + y)
         time.sleep(1)
         # 重新截屏，方便下一次
@@ -53,17 +53,17 @@ def check(hwnd):
     else:
         logging.info("需要领取任务")
         clickPoints = []
-        clickPoints.append(realPoint(click_lingqu_rewnu1))
-        clickPoints.append(realPoint(click_lingqu_rewnu1_1))
-        clickPoints.append(realPoint(click_lingqu_rewnu2))
-        clickPoints.append(realPoint(click_lingqu_rewnu3))
+        clickPoints.append(realPoint(click_lingqu_rewnu1,scaleScreen))
+        clickPoints.append(realPoint(click_lingqu_rewnu1_1,scaleScreen))
+        clickPoints.append(realPoint(click_lingqu_rewnu2,scaleScreen))
+        clickPoints.append(realPoint(click_lingqu_rewnu3,scaleScreen))
         for i in clickPoints:
             x, y = i
             leftClick(left + x, top + y)
             time.sleep(1)
         # 查找火线追缴
         logging.info("准备滚动查找火线追缴")
-        x, y = realPoint(click_scroll_huoxian)
+        x, y = realPoint(click_scroll_huoxian,scaleScreen)
         # 向下滑动鼠标20
         pyautogui.mouseDown(left + x, top + y, button='left')
         pyautogui.dragTo(left + x, top + y + 300, button='left')
@@ -71,7 +71,7 @@ def check(hwnd):
         # 查找火线追缴
         windwow_capture(hwnd)
         logging.info("识别火线追缴")
-        x, y = checkHuoXianZhuiJiao(ocr)
+        x, y = checkHuoXianZhuiJiao(ocr,scaleScreen)
         if x != 0 and y != 0:
             logging.info("魔怪追缴令识别坐标：" + str(x) + "," + str(y))
             pyautogui.mouseUp()
@@ -80,7 +80,7 @@ def check(hwnd):
             clickPoints = []
             clickPoints.append((x, y))
             clickPoints.append((x, y + 35))
-            clickPoints.append(realPoint(click_lingqu_rewnu7))
+            clickPoints.append(realPoint(click_lingqu_rewnu7,scaleScreen))
             for i in clickPoints:
                 x, y = i
                 leftClick(left + x, top + y)
@@ -89,13 +89,13 @@ def check(hwnd):
                 # 这里的时间有点长，因为自动寻路不是立马弹出的
                 time.sleep(1)
                 logging.info("点击外部一下，呼出自动寻路")
-                x, y = realPoint(click_huchu_zidongxunlu)
+                x, y = realPoint(click_huchu_zidongxunlu,scaleScreen)
                 leftClick(left + x, top + y)
                 time.sleep(2)
                 # 取消自动寻路
                 logging.info("查询界面是否是自动寻路")
                 windwow_capture(hwnd)
-                x, y = checkZiDongXunLu(ocr)
+                x, y = checkZiDongXunLu(ocr,scaleScreen)
                 if x != 0 and y != 0:
                     logging.info("取消自动寻路")
                     leftClick(left + x, top + y)
@@ -107,7 +107,7 @@ def check(hwnd):
 # 打怪
 def daguai(ocr):
     # 检测是否死亡
-    result = checkIsSiWang()
+    result = checkIsSiWang(scaleScreen)
     if result == 1:
         countDown = 20
         while (countDown > 0):
@@ -115,16 +115,16 @@ def daguai(ocr):
             time.sleep(1)
             countDown -= 1
         time.sleep(20)
-        x, y = realPoint(detect_siwang_point)
+        x, y = realPoint(detect_siwang_point,scaleScreen)
         # 点击原地复活
         leftClick(left + x, top + y)
         time.sleep(3)
         # 点击出征宝宝1
-        x, y = realPoint(click_bb1_chuzheng)
+        x, y = realPoint(click_bb1_chuzheng,scaleScreen)
         leftClick(left + x, top + y)
         time.sleep(1)
         # 点击出征宝宝2
-        x, y =realPoint( click_bb2_chuzheng)
+        x, y =realPoint( click_bb2_chuzheng,scaleScreen)
         leftClick(left + x, top + y)
         time.sleep(1)
     currentTime = time.time()
@@ -132,25 +132,25 @@ def daguai(ocr):
     # 检测宝宝，间隔5分钟
     if (currentTime - lastCheckBBTime) > 5 * 60:
         lastCheckBBTime = currentTime
-        x, y = realPoint(click_huanshou)
+        x, y = realPoint(click_huanshou,scaleScreen)
         logging.info("点击幻兽,打开")
         # 点击幻兽
         leftClick(left + x, top + y)
         time.sleep(1)
         logging.info("点击孵化所,打开")
         # 点击孵化所
-        x, y = realPoint(click_huanshou_fuhua)
+        x, y = realPoint(click_huanshou_fuhua,scaleScreen)
         leftClick(left + x, top + y)
         time.sleep(1)
 
         while True:
             logging.info("鼠标移动到幻兽第一个格子")
             # 鼠标移动到幻兽第一个格子
-            x, y = realPoint(click_huanshou_gezi1)
+            x, y = realPoint(click_huanshou_gezi1,scaleScreen)
             pyautogui.moveTo(left + x, top + y)
             # 截屏
             windwow_capture(hwnd)
-            result = checkBB(ocr)
+            result = checkBB(ocr,scaleScreen)
             if result == 0:
                 logging.info("没有找到宝宝")
                 break
@@ -162,7 +162,7 @@ def daguai(ocr):
                 logging.info("丢弃该宝宝")
                 # 按下宝宝
                 pyautogui.mouseDown(left + x, top + y, button='left')
-                x, y = realPoint(click_huanshou_diuqi_out)
+                x, y = realPoint(click_huanshou_diuqi_out,scaleScreen)
                 # 鼠标移动到外面
                 pyautogui.dragTo(left + x, top + y, button='left')
                 # 抬起丢弃
@@ -170,27 +170,27 @@ def daguai(ocr):
                 pyautogui.mouseUp()
                 time.sleep(2)
                 # 丢弃界面弹出
-                x, y = realPoint(click_huanshou_diuqi_queding)
+                x, y = realPoint(click_huanshou_diuqi_queding,scaleScreen)
                 leftClick(left + x, top + y)
                 time.sleep(2)
         # 点击孵化所,关闭
         logging.info("点击孵化所,关闭")
-        x, y = realPoint(click_huanshou_fuhua)
+        x, y = realPoint(click_huanshou_fuhua,scaleScreen)
         leftClick(left + x, top + y)
         time.sleep(1)
         # 点击幻兽
         logging.info("点击幻兽,关闭")
-        x, y = realPoint(click_huanshou)
+        x, y = realPoint(click_huanshou,scaleScreen)
         leftClick(left + x, top + y)
         time.sleep(1)
     windwow_capture(hwnd)
 
     # 检测自己的坐标
-    x, y = checkMyLocation(ocr)
+    x, y = checkMyLocation(ocr,scaleScreen)
     if (x == 0 or y == 0):
         # 如果坐标为0，可能弹出了防外挂
         logging.info("自己坐标为0，查询是否弹出防外挂检测")
-        result = checkFangWaiGuai(ocr)
+        result = checkFangWaiGuai(ocr,scaleScreen)
         # 检测到了防外挂
         if result == 1:
             engine.say("外挂检测")
@@ -274,6 +274,7 @@ while True:
         height = bottom - top
         # 保存缩放比例
         scaleScreen = width / cap_width
+        logging.info("scaleScreen: "+str(scaleScreen))
         print(left, top, right, bottom)
         # 将创建指定窗口的线程设置到前台，并且激活该窗口
         win32gui.SetForegroundWindow(hwnd)
@@ -286,10 +287,10 @@ while True:
         windwow_capture(hwnd)
         # 第一步检测右侧任务表有没有弹出来
         logging.info("检测右侧任务表有没有弹出来")
-        result = checkRightRenwuBan(ocr)
+        result = checkRightRenwuBan(ocr,scaleScreen)
         # 如果没有打开面板
         if result == 0:
-            x, y = realPoint(click_lingqu_mianban)
+            x, y = realPoint(click_lingqu_mianban,scaleScreen)
             leftClick(left + x, top + y)
             time.sleep(1)
         # 循环工作

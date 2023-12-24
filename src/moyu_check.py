@@ -10,8 +10,8 @@ from moyu_util import checkImage, letterbox_image, realDetectSize, realPoint
 
 
 # 检测右边的任务版是否打开
-def checkRightRenwuBan(ocr):
-    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu))
+def checkRightRenwuBan(ocr,scaleScreen):
+    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu,scaleScreen))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -25,8 +25,8 @@ def checkRightRenwuBan(ocr):
 
 
 # 检测是否领取了任务
-def checkLingQuRenWu(ocr):
-    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu))
+def checkLingQuRenWu(ocr,scaleScreen):
+    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu,scaleScreen))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -48,8 +48,8 @@ def checkLingQuRenWu(ocr):
 
 # 查看火线追缴
 # [[[75.0, 379.0], [178.0, 379.0], [178.0, 404.0], [75.0, 404.0]], ('魔怪追剿令', 0.919135570526123)]
-def checkHuoXianZhuiJiao(ocr):
-    result = checkImage(ocr, realDetectSize(detect_huoxianzhuijiao))
+def checkHuoXianZhuiJiao(ocr,scaleScreen):
+    result = checkImage(ocr, realDetectSize(detect_huoxianzhuijiao,scaleScreen))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -64,9 +64,9 @@ def checkHuoXianZhuiJiao(ocr):
 
 
 # 检测是否有自动寻路
-def checkZiDongXunLu(ocr):
+def checkZiDongXunLu(ocr,scaleScreen):
     # 检测中间的自动寻路
-    result = checkImage(ocr, realDetectSize(detect_zidongxunlun_center))
+    result = checkImage(ocr, realDetectSize(detect_zidongxunlun_center,scaleScreen))
     if not any(result):
         return 0, 0
     for idx in range(len(result)):
@@ -75,9 +75,9 @@ def checkZiDongXunLu(ocr):
             if len(line) == 2:
                 c, score = line[1]
                 if '自动寻路' in c:
-                    return realPoint(click_cancel_centerzidongxunlu)
+                    return realPoint(click_cancel_centerzidongxunlu,scaleScreen)
     # 检测左边的自动寻路
-    result = checkImage(ocr, realDetectSize(detect_zidongxunlun_left))
+    result = checkImage(ocr, realDetectSize(detect_zidongxunlun_left,scaleScreen))
     if not any(result):
         return 0, 0
     for idx in range(len(result)):
@@ -86,15 +86,15 @@ def checkZiDongXunLu(ocr):
             if len(line) == 2:
                 c, score = line[1]
                 if '自动寻路' in c:
-                    return realPoint(click_cancel_leftzidongxunlu)
+                    return realPoint(click_cancel_leftzidongxunlu,scaleScreen)
     return 0, 0
 
 
 # 检测当前坐标
-def checkMyLocation(ocr):
+def checkMyLocation(ocr,scaleScreen):
     list = []
-    list.append(realDetectSize(detect_my_location_x))
-    list.append(realDetectSize(detect_my_location_y))
+    list.append(realDetectSize(detect_my_location_x,scaleScreen))
+    list.append(realDetectSize(detect_my_location_y,scaleScreen))
     xy = [0, 0]
     for idx in range(len(list)):
         detect = list[idx]
@@ -121,8 +121,8 @@ def checkMyLocation(ocr):
 
 
 # 检测防外挂
-def checkFangWaiGuai(ocr):
-    result = checkImage(ocr, realDetectSize(detect_fang_waiguai))
+def checkFangWaiGuai(ocr,scaleScreen):
+    result = checkImage(ocr, realDetectSize(detect_fang_waiguai,scaleScreen))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -136,8 +136,8 @@ def checkFangWaiGuai(ocr):
 
 
 # 检测是否领取奖励
-def checkLingQuJiangli(ocr):
-    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu))
+def checkLingQuJiangli(ocr,scaleScreen):
+    result = checkImage(ocr, realDetectSize(detect_lingqu_renwu,scaleScreen))
     if not any(result):
         return 0
     for idx in range(len(result)):
@@ -151,17 +151,17 @@ def checkLingQuJiangli(ocr):
 
 
 # 检测宝宝状态
-def checkBB(ocr):
+def checkBB(ocr,scaleScreen):
     img_src = Image.open('./screenshot.png')  # (411, 273)
     src_strlist = img_src.load()
-    x, y = realPoint(click_huanshou_gezi1)
+    x, y = realPoint(click_huanshou_gezi1,scaleScreen)
     # 100,100 是像素点的坐标
     data = src_strlist[x, y]
     #空的背包
     if data == (20, 22, 23):
         return 0
     else:
-        result = checkImage(ocr, realDetectSize(detect_bb_shishenm))
+        result = checkImage(ocr, realDetectSize(detect_bb_shishenm,scaleScreen))
         if not any(result):
             return -1
         for idx in range(len(result)):
@@ -177,10 +177,10 @@ def checkBB(ocr):
 
 # (232, 183, 241)
 # 检测是否死亡
-def checkIsSiWang():
+def checkIsSiWang(scaleScreen):
     img_src = Image.open('./screenshot.png')  # (411, 273)
     src_strlist = img_src.load()
-    x, y = realPoint(detect_siwang_point)
+    x, y = realPoint(detect_siwang_point,scaleScreen)
     # 100,100 是像素点的坐标
     data = src_strlist[x, y]
     if data == (232, 183, 241):
