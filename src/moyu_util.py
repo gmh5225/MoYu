@@ -6,6 +6,9 @@ import logging
 
 
 # 截图屏幕一张图片，保存到screenshot.png
+from src.moyu_constance import cap_width
+
+
 def windwow_capture(hwnd):
     # 获取窗口大小和位置
     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
@@ -35,6 +38,17 @@ def mouseScroll(x, y, dy):
     pyautogui.moveTo(x, y)
     pyautogui.scroll(dy)
 
+# 获取真实大小
+def realDetectSize(size,width):
+    left,top,right,bootom=size
+    scale=width / cap_width
+    return int(left * scale),int(top * scale),int(right * scale),int(bootom * scale)
+
+# 获取真实大小
+def realPoint(point,width):
+    x,y=point
+    scale=width / cap_width
+    return int(x * scale),int(y * scale)
 
 # 对图片进行扩大，因为有些图片，较小，识别率低
 def letterbox_image(image, size):

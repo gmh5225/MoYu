@@ -1,4 +1,8 @@
 
+#截屏大小
+cap_width=1563
+cap_height=1152
+
 
 # 领取任务，识别区域
 detect_lingqu_renwu = 1207, 439, 1536, 660

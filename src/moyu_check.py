@@ -78,6 +78,8 @@ def checkZiDongXunLu(ocr):
                     return click_cancel_centerzidongxunlu
     # 检测左边的自动寻路
     result = checkImage(ocr, detect_zidongxunlun_left)
+    if not any(result):
+        return 0, 0
     for idx in range(len(result)):
         res = result[idx]
         for line in res:
