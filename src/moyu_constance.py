@@ -62,8 +62,16 @@ click_cancel_leftzidongxunlu = 428, 359
 click_cancel_centerzidongxunlu = 693, 644
 # 点击 呼出自动寻路
 click_huchu_zidongxunlu = 1000, 820
+# 点击 关闭任务
+click_guanbi_renwu = 1173, 177
 
 leftBianJie = 378
 topBianJie = 602
 bottomBianJie = 607
 rightBianJie = 465
+
+
+# leftBianJie = 378
+# topBianJie = 552
+# bottomBianJie = 560
+# rightBianJie = 465
