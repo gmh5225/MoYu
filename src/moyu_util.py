@@ -29,6 +29,10 @@ def leftClick(x, y):
     pyautogui.mouseDown(x, y, button='left')
     pyautogui.mouseUp()
 
+# 鼠标左键点击
+def rightClick(x, y):
+    pyautogui.mouseDown(x, y, button='right')
+    pyautogui.mouseUp()
 
 # 鼠标滚动
 def mouseScroll(x, y, dy):

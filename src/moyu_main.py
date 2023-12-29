@@ -16,7 +16,7 @@ from moyu_constance import click_lingqu_mianban, click_lingqujiangli, click_ling
     click_lingqu_rewnu7, topBianJie, bottomBianJie, leftBianJie, rightBianJie, click_scroll_huoxian, click_huanshou, \
     click_huanshou_gezi1, click_huanshou_fuhua, click_huanshou_diuqi_out, click_huanshou_diuqi_queding, \
     detect_siwang_point, click_bb1_chuzheng, click_bb2_chuzheng, click_huchu_zidongxunlu, cap_width, click_guanbi_renwu
-from moyu_util import windwow_capture, leftClick, realPoint
+from moyu_util import windwow_capture, leftClick, realPoint, rightClick
 
 # 游戏运行
 doing = 1
@@ -158,6 +158,10 @@ def daguai(ocr):
         time.sleep(1)
 
         while True:
+            # 先移动到其他位置,这个可以随便，如果不移动，会不刷新文字，导致不识别
+            x, y = click_huanshou_diuqi_out
+            pyautogui.moveTo(left + x, top + y)
+            time.sleep(1)
             logging.info("鼠标移动到幻兽第一个格子")
             # 鼠标移动到幻兽第一个格子
             x, y = realPoint(click_huanshou_gezi1, scaleScreen)
@@ -171,7 +175,7 @@ def daguai(ocr):
                 break
             elif result == 1:
                 logging.info("是需要的宝宝，放到孵化所")
-                leftClick(left + x, top + y)
+                rightClick(left + x, top + y)
                 time.sleep(2)
             else:
                 logging.info("丢弃该宝宝")
@@ -180,16 +184,16 @@ def daguai(ocr):
                 time.sleep(0.5)
                 x, y = realPoint(click_huanshou_diuqi_out, scaleScreen)
                 # 鼠标移动到外面
-                pyautogui.dragTo(left + x, top + y, button='left')
-                time.sleep(1)
-                # 抬起丢弃
-                pyautogui.mouseDown(left + x, top + y, button='left')
-                pyautogui.mouseUp()
+                pyautogui.moveTo(left + x, top + y)
                 time.sleep(2)
+                pyautogui.mouseUp()
+                # 按下宝宝
+                pyautogui.click(button='left')
+                time.sleep(1)
                 # 丢弃界面弹出
                 x, y = realPoint(click_huanshou_diuqi_queding, scaleScreen)
                 leftClick(left + x, top + y)
-                time.sleep(2)
+                time.sleep(1)
         # 点击孵化所,关闭
         logging.info("点击孵化所,关闭")
         x, y = realPoint(click_huanshou_fuhua, scaleScreen)
