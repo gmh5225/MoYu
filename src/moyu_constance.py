@@ -76,7 +76,10 @@ detect_xp00 = 14,1144
 # 点击 xp技能
 click_xp1 = 1330,999
 
-
+# 点击 关闭窗口1
+click_close_chuangkou = 1502,0
+# 点击 关闭窗口2
+click_close_queding = 764,688
 
 leftBianJie = 378
 topBianJie = 602

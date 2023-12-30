@@ -16,7 +16,7 @@ from moyu_constance import click_lingqu_mianban, click_lingqujiangli, click_ling
     click_lingqu_rewnu7, topBianJie, bottomBianJie, leftBianJie, rightBianJie, click_scroll_huoxian, click_huanshou, \
     click_huanshou_gezi1, click_huanshou_fuhua, click_huanshou_diuqi_out, click_huanshou_diuqi_queding, \
     detect_siwang_point, click_bb1_chuzheng, click_bb2_chuzheng, click_huchu_zidongxunlu, cap_width, click_guanbi_renwu, \
-    click_xp1
+    click_xp1, click_close_chuangkou, click_close_queding
 from moyu_util import windwow_capture, leftClick, realPoint, rightClick
 
 # 游戏运行
@@ -28,9 +28,11 @@ lastCheckBBTime = time.time()
 # 真实屏幕相对截屏缩放
 scaleScreen = 0
 # 是否检测BB
-isCheckBB=1
-#是否有XP
-isXp=0
+isCheckBB = 1
+# 是否有XP
+isXp = 0
+# 检测防外挂是否退出游戏
+isFangWaiGuaExist = 1
 
 # 上一次的坐标值
 lastX = 0
@@ -111,7 +113,6 @@ def check(hwnd):
             x, y = realPoint(click_guanbi_renwu, scaleScreen)
             leftClick(left + x, top + y)
             time.sleep(1)
-        daguai(ocr, hwnd)
 
 
 # 取消自动寻路
@@ -245,9 +246,13 @@ def daguai(ocr, hwnd):
         result = checkFangWaiGuai(ocr, scaleScreen)
         # 检测到了防外挂
         if result == 1:
-            engine.say("外挂检测")
-            engine.runAndWait()
-            time.sleep(1)
+            if isFangWaiGuaExist:
+                closeGame()
+                exit(0)
+            else:
+                engine.say("外挂检测")
+                engine.runAndWait()
+                time.sleep(1)
     else:
         logging.info("自己坐标：" + str(x) + "," + str(y))
         global goLeft
@@ -291,26 +296,35 @@ def daguai(ocr, hwnd):
             pyautogui.mouseDown(cX, cY, button='left')
             time.sleep(1.6)
             pyautogui.mouseUp()
-        #如果有XP技能，点击XP
-        xp=checkHasXp(scaleScreen)
-        global  isXp
+        # 如果有XP技能，点击XP
+        xp = checkHasXp(scaleScreen)
+        global isXp
         if xp:
             x, y = realPoint(click_xp1, scaleScreen)
             leftClick(left + x, top + y)
             time.sleep(1)
-            isXp=1
-        #检查XP有没有结束,这里比较特俗，需要判断xp技能是否开启
-        xpFinish=checkHasXpIsFinish(scaleScreen)
+            isXp = 1
+        # 检查XP有没有结束,这里比较特俗，需要判断xp技能是否开启
+        xpFinish = checkHasXpIsFinish(scaleScreen)
         if isXp and xpFinish:
-            isXp=0
-        if isXp :
+            isXp = 0
+        if isXp:
             pyautogui.click(button="right")
         else:
             pyautogui.keyDown("f1")
             time.sleep(1.2)
             pyautogui.keyUp("f1")
-
-
+#关闭游戏
+def closeGame():
+    x, y = realPoint(click_close_chuangkou,scaleScreen)
+    pyautogui.mouseDown(left + x, top + y - 10, button='left')
+    pyautogui.mouseUp()
+    time.sleep(2)
+    x, y = click_close_queding
+    pyautogui.mouseDown(left + x, top + y, button='left')
+    pyautogui.mouseUp()
+    time.sleep(10)
+    exit(0)
 
 # 初始化日志
 logger = logging.getLogger()
