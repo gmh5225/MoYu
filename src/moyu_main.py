@@ -10,12 +10,13 @@ import win32gui
 from paddleocr import PaddleOCR
 
 from moyu_check import checkRightRenwuBan, checkLingQuRenWu, checkHuoXianZhuiJiao, checkZiDongXunLu, checkMyLocation, \
-    checkFangWaiGuai, checkBB, checkIsSiWang
+    checkFangWaiGuai, checkBB, checkIsSiWang, checkHasXp, checkHasXpIsFinish
 from moyu_constance import click_lingqu_mianban, click_lingqujiangli, click_lingqu_rewnu1, click_lingqu_rewnu1_1, \
     click_lingqu_rewnu2, click_lingqu_rewnu3, detect_huoxianzhuijiao, \
     click_lingqu_rewnu7, topBianJie, bottomBianJie, leftBianJie, rightBianJie, click_scroll_huoxian, click_huanshou, \
     click_huanshou_gezi1, click_huanshou_fuhua, click_huanshou_diuqi_out, click_huanshou_diuqi_queding, \
-    detect_siwang_point, click_bb1_chuzheng, click_bb2_chuzheng, click_huchu_zidongxunlu, cap_width, click_guanbi_renwu
+    detect_siwang_point, click_bb1_chuzheng, click_bb2_chuzheng, click_huchu_zidongxunlu, cap_width, click_guanbi_renwu, \
+    click_xp1
 from moyu_util import windwow_capture, leftClick, realPoint, rightClick
 
 # 游戏运行
@@ -27,7 +28,9 @@ lastCheckBBTime = time.time()
 # 真实屏幕相对截屏缩放
 scaleScreen = 0
 # 是否检测BB
-isCheckBB=0
+isCheckBB=1
+#是否有XP
+isXp=0
 
 # 上一次的坐标值
 lastX = 0
@@ -202,16 +205,16 @@ def daguai(ocr, hwnd):
                     x, y = realPoint(click_huanshou_diuqi_queding, scaleScreen)
                     leftClick(left + x, top + y)
                     time.sleep(1)
-        # 点击孵化所,关闭
-        logging.info("点击孵化所,关闭")
-        x, y = realPoint(click_huanshou_fuhua, scaleScreen)
-        leftClick(left + x, top + y)
-        time.sleep(1)
-        # 点击幻兽
-        logging.info("点击幻兽,关闭")
-        x, y = realPoint(click_huanshou, scaleScreen)
-        leftClick(left + x, top + y)
-        time.sleep(1)
+            # 点击孵化所,关闭
+            logging.info("点击孵化所,关闭")
+            x, y = realPoint(click_huanshou_fuhua, scaleScreen)
+            leftClick(left + x, top + y)
+            time.sleep(1)
+            # 点击幻兽
+            logging.info("点击幻兽,关闭")
+            x, y = realPoint(click_huanshou, scaleScreen)
+            leftClick(left + x, top + y)
+            time.sleep(1)
     windwow_capture(hwnd)
 
     # 检测自己的坐标
@@ -221,7 +224,7 @@ def daguai(ocr, hwnd):
     global lastX
     global lastY
     global lastXYTime
-    if lastX == x and lastY == y and lastXYTime - t > 10:
+    if lastX == x and lastY == y and t - lastXYTime > 10:
         logging.info("检测坐标一致，没有动")
         lastXYTime = t
         # 获取魔域的窗口，因为发现有时候，鼠标无效，不清楚是不是要获取屏幕窗口
@@ -230,6 +233,7 @@ def daguai(ocr, hwnd):
             # 将创建指定窗口的线程设置到前台，并且激活该窗口
             win32gui.SetForegroundWindow(hwnd)
             time.sleep(3)
+            windwow_capture(hwnd)
             # 有可能自动寻路打开了
             quxiaozidongxunlun(ocr, hwnd)
             return
@@ -287,9 +291,25 @@ def daguai(ocr, hwnd):
             pyautogui.mouseDown(cX, cY, button='left')
             time.sleep(1.6)
             pyautogui.mouseUp()
-        pyautogui.keyDown("f1")
-        time.sleep(1.2)
-        pyautogui.keyUp("f1")
+        #如果有XP技能，点击XP
+        xp=checkHasXp(scaleScreen)
+        global  isXp
+        if xp:
+            x, y = realPoint(click_xp1, scaleScreen)
+            leftClick(left + x, top + y)
+            time.sleep(1)
+            isXp=1
+        #检查XP有没有结束,这里比较特俗，需要判断xp技能是否开启
+        xpFinish=checkHasXpIsFinish(scaleScreen)
+        if isXp and xpFinish:
+            isXp=0
+        if isXp :
+            pyautogui.click(button="right")
+        else:
+            pyautogui.keyDown("f1")
+            time.sleep(1.2)
+            pyautogui.keyUp("f1")
+
 
 
 # 初始化日志

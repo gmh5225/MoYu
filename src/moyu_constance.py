@@ -12,8 +12,12 @@ detect_my_location_y = 1463, 29, 1513, 53
 detect_huoxianzhuijiao = 66, 293, 534, 917
 # 自动寻路 中间
 detect_zidongxunlun_center = 617, 451, 921, 699
-# 自动寻路 左边
-detect_zidongxunlun_left = 10, 339, 446, 640
+# 自动寻路 左边 像素值判断
+detect_zidongxunlun_left1 = 224,352
+# 自动寻路 左边 像素值判断
+detect_zidongxunlun_left2 = 348,365
+
+
 # 防外挂检测
 detect_fang_waiguai = 25, 22, 303, 125
 # 检测宝宝是什么
@@ -64,6 +68,15 @@ click_cancel_centerzidongxunlu = 693, 644
 click_huchu_zidongxunlu = 1000, 820
 # 点击 关闭任务
 click_guanbi_renwu = 1173, 177
+
+# 点击 xp技能
+detect_xp0 = 1511,1144
+# 点击 xp技能
+detect_xp00 = 14,1144
+# 点击 xp技能
+click_xp1 = 1330,999
+
+
 
 leftBianJie = 378
 topBianJie = 602
