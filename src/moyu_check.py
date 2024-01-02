@@ -162,6 +162,7 @@ def checkBB(ocr, scaleScreen):
     if data == (20, 22, 23):
         return 0
     else:
+        #return 1
         result = checkImage(ocr, realDetectSize(detect_bb_shishenm,scaleScreen))
         if not any(result):
             return -1
@@ -170,7 +171,9 @@ def checkBB(ocr, scaleScreen):
             for line in res:
                 if len(line) == 2:
                     c, score = line[1]
-                    if '莎菲' in c or '法师' in c or '凯隆' in c or '凯特' in c or '奥伦' in c:
+                    # if '莎菲' in c or '法师' in c or '凯隆' in c or '凯特' in c or '奥伦' in c:
+                    #     return 1
+                    if '莎菲' in c or '法师' in c:
                         return 1
         #其他宝宝
         return 2

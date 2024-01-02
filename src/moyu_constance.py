@@ -79,13 +79,25 @@ click_xp1 = 1330,999
 # 点击 关闭窗口1
 click_close_chuangkou = 1502,0
 # 点击 关闭窗口2
-click_close_queding = 764,688
+click_huanbaoliangong = 632,688
+# 点击 关闭窗口2
+click_huanbaoliangong_ok = 691,652
+
+# leftBianJie = 378
+# topBianJie = 602
+# bottomBianJie = 607
+# rightBianJie = 465
+
 
 leftBianJie = 378
 topBianJie = 602
 bottomBianJie = 607
-rightBianJie = 465
+rightBianJie = 508
 
+leftBianJie = 378
+topBianJie = 504
+bottomBianJie = 512
+rightBianJie = 513
 
 # leftBianJie = 378
 # topBianJie = 552

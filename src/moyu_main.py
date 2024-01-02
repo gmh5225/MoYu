@@ -16,7 +16,7 @@ from moyu_constance import click_lingqu_mianban, click_lingqujiangli, click_ling
     click_lingqu_rewnu7, topBianJie, bottomBianJie, leftBianJie, rightBianJie, click_scroll_huoxian, click_huanshou, \
     click_huanshou_gezi1, click_huanshou_fuhua, click_huanshou_diuqi_out, click_huanshou_diuqi_queding, \
     detect_siwang_point, click_bb1_chuzheng, click_bb2_chuzheng, click_huchu_zidongxunlu, cap_width, click_guanbi_renwu, \
-    click_xp1, click_close_chuangkou, click_close_queding
+    click_xp1, click_close_chuangkou, click_huanbaoliangong, click_huanbaoliangong_ok
 from moyu_util import windwow_capture, leftClick, realPoint, rightClick
 
 # 游戏运行
@@ -234,9 +234,9 @@ def daguai(ocr, hwnd):
             # 将创建指定窗口的线程设置到前台，并且激活该窗口
             win32gui.SetForegroundWindow(hwnd)
             time.sleep(3)
-            windwow_capture(hwnd)
-            # 有可能自动寻路打开了
-            quxiaozidongxunlun(ocr, hwnd)
+            # windwow_capture(hwnd)
+            # # 有可能自动寻路打开了
+            # quxiaozidongxunlun(ocr, hwnd)
             return
     lastX = x
     lastY = y
@@ -265,14 +265,14 @@ def daguai(ocr, hwnd):
             cY = top + height * 0.595
             logging.info("小于上边界，向下偏移")
             pyautogui.mouseDown(cX, cY, button='left')
-            time.sleep(0.3)
+            time.sleep(0.6)
             pyautogui.mouseUp()
         if y > bottomBianJie:
             cX = left + width * 0.593
             cY = top + height * 0.300
             logging.info("大于下边界，向上偏移")
             pyautogui.mouseDown(cX, cY, button='left')
-            time.sleep(0.3)
+            time.sleep(0.6)
             pyautogui.mouseUp()
             # 到了左边界了，需要往右边移动
         if x < leftBianJie:
@@ -311,20 +311,27 @@ def daguai(ocr, hwnd):
         if isXp:
             pyautogui.click(button="right")
         else:
-            pyautogui.keyDown("f1")
-            time.sleep(1.2)
-            pyautogui.keyUp("f1")
-#关闭游戏
+            pyautogui.keyDown("f6")
+            pyautogui.keyUp("f6")
+            time.sleep(3)
+
+
+# 关闭游戏
 def closeGame():
-    x, y = realPoint(click_close_chuangkou,scaleScreen)
+    x, y = realPoint(click_close_chuangkou, scaleScreen)
     pyautogui.mouseDown(left + x, top + y - 10, button='left')
     pyautogui.mouseUp()
     time.sleep(2)
-    x, y = click_close_queding
+    x, y = click_huanbaoliangong
+    pyautogui.mouseDown(left + x, top + y, button='left')
+    pyautogui.mouseUp()
+    time.sleep(2)
+    x, y = click_huanbaoliangong_ok
     pyautogui.mouseDown(left + x, top + y, button='left')
     pyautogui.mouseUp()
     time.sleep(10)
     exit(0)
+
 
 # 初始化日志
 logger = logging.getLogger()
@@ -365,16 +372,17 @@ while True:
         logging.info("初始化OCR")
         # 抓拍一张图片
         windwow_capture(hwnd)
-        # 第一步检测右侧任务表有没有弹出来
-        logging.info("检测右侧任务表有没有弹出来")
-        result = checkRightRenwuBan(ocr, scaleScreen)
-        # 如果没有打开面板
-        if result == 0:
-            x, y = realPoint(click_lingqu_mianban, scaleScreen)
-            leftClick(left + x, top + y)
-            time.sleep(1)
+        # # 第一步检测右侧任务表有没有弹出来
+        # logging.info("检测右侧任务表有没有弹出来")
+        # result = checkRightRenwuBan(ocr, scaleScreen)
+        # # 如果没有打开面板
+        # if result == 0:
+        #     x, y = realPoint(click_lingqu_mianban, scaleScreen)
+        #     leftClick(left + x, top + y)
+        #     time.sleep(1)
         # 循环工作
         while doing:
-            check(hwnd)
+            # check(hwnd)
+            daguai(ocr, hwnd)
     print("finish")
     exit(0)
