@@ -1,0 +1,8 @@
+H://DataSets/MOYUwaigua/moyu/train/images/valid/132.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/135.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/138.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/141.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/148.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/79.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/805.png
+H://DataSets/MOYUwaigua/moyu/train/images/valid/808.png
